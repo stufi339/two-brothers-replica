@@ -1,7 +1,7 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart, Star } from "lucide-react";
 
 interface ProductCardProps {
   image: string;
@@ -9,6 +9,8 @@ interface ProductCardProps {
   price: string;
   originalPrice?: string;
   badge?: string;
+  rating?: number;
+  reviewCount?: number;
 }
 
 export const ProductCard = ({
@@ -17,6 +19,8 @@ export const ProductCard = ({
   price,
   originalPrice,
   badge,
+  rating = 0,
+  reviewCount = 0,
 }: ProductCardProps) => {
   return (
     <Card className="group hover:shadow-xl transition-all duration-300 border-border overflow-hidden">
@@ -41,6 +45,27 @@ export const ProductCard = ({
       </div>
       <CardContent className="p-4">
         <h3 className="font-semibold text-lg mb-2 line-clamp-2">{name}</h3>
+        
+        {rating > 0 && (
+          <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-4 h-4 ${
+                    i < Math.floor(rating)
+                      ? "fill-primary text-primary"
+                      : "text-muted-foreground"
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-sm text-muted-foreground">
+              ({reviewCount} reviews)
+            </span>
+          </div>
+        )}
+
         <div className="flex items-center gap-2">
           <span className="text-2xl font-bold text-primary">₹{price}</span>
           {originalPrice && (
