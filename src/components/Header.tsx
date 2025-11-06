@@ -1,8 +1,12 @@
 import { Search, User, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useCart } from "@/context/CartContext";
 
 export const Header = () => {
+  const { getTotalItems } = useCart();
+  const totalItems = getTotalItems();
+
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-border">
       <div className="container mx-auto px-4 py-4">
@@ -38,9 +42,11 @@ export const Header = () => {
             </Button>
             <Button variant="ghost" size="icon" className="hover:bg-accent relative">
               <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
-                0
-              </span>
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                  {totalItems}
+                </span>
+              )}
             </Button>
           </div>
         </div>
