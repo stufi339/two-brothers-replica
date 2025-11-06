@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Search, User, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,14 +41,16 @@ export const Header = () => {
             <Button variant="ghost" size="icon" className="hover:bg-accent relative">
               <Heart className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="hover:bg-accent relative">
-              <ShoppingCart className="h-5 w-5" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
-                  {totalItems}
-                </span>
-              )}
-            </Button>
+            <Link to="/checkout">
+              <Button variant="ghost" size="icon" className="hover:bg-accent relative">
+                <ShoppingCart className="h-5 w-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                    {totalItems}
+                  </span>
+                )}
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
