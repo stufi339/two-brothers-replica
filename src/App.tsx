@@ -10,6 +10,8 @@ import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderTracking from "./pages/OrderTracking";
+import FarmLife from "./pages/FarmLife";
+import CuratedPicks from "./pages/CuratedPicks";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

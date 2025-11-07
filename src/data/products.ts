@@ -6,6 +6,7 @@ import riceImage from "@/assets/rice-product.jpg";
 export interface Product {
   id: number;
   image: string;
+  images?: string[];
   name: string;
   price: string;
   originalPrice?: string;
@@ -15,6 +16,9 @@ export interface Product {
   dietaryTags: string[];
   category: string;
   inStock: boolean;
+  healthConcerns?: string[];
+  description?: string;
+  nutritionalInfo?: string;
 }
 
 export const products: Product[] = [
@@ -30,6 +34,8 @@ export const products: Product[] = [
     dietaryTags: ["Organic", "Gluten-Free", "Chemical-Free"],
     category: "Ghee",
     inStock: true,
+    healthConcerns: ["Immunity Boost", "Gut Health"],
+    description: "Pure A2 ghee made from the milk of free-grazing Gir cows. Rich in nutrients and perfect for cooking.",
   },
   {
     id: 2,
@@ -42,6 +48,8 @@ export const products: Product[] = [
     dietaryTags: ["Organic", "Cold-Pressed", "Vegan"],
     category: "Oils",
     inStock: true,
+    healthConcerns: ["Weight Loss", "Diabetes Care"],
+    description: "Traditional wood-pressed oils retaining all natural nutrients and flavors.",
   },
   {
     id: 3,
@@ -55,6 +63,8 @@ export const products: Product[] = [
     dietaryTags: ["Organic", "Chemical-Free", "Non-GMO"],
     category: "Grains",
     inStock: true,
+    healthConcerns: ["Gut Health", "Diabetes Care"],
+    description: "Freshly stone-ground whole wheat flour preserving all nutrients and fiber.",
   },
   {
     id: 4,
@@ -67,6 +77,8 @@ export const products: Product[] = [
     dietaryTags: ["Organic", "Gluten-Free", "Vegan"],
     category: "Rice",
     inStock: true,
+    healthConcerns: ["Diabetes Care", "Weight Loss"],
+    description: "Premium aged basmati rice with authentic aroma and long grains.",
   },
   {
     id: 5,
@@ -80,6 +92,8 @@ export const products: Product[] = [
     dietaryTags: ["Organic", "Gluten-Free", "Chemical-Free"],
     category: "Ghee",
     inStock: true,
+    healthConcerns: ["Immunity Boost", "Gut Health"],
+    description: "Handcrafted using traditional Bilona method for maximum nutrition and taste.",
   },
   {
     id: 6,
@@ -92,6 +106,8 @@ export const products: Product[] = [
     dietaryTags: ["Organic", "Cold-Pressed", "Vegan", "Chemical-Free"],
     category: "Oils",
     inStock: true,
+    healthConcerns: ["Weight Loss", "Immunity Boost"],
+    description: "Pure virgin coconut oil extracted through cold-press method.",
   },
   {
     id: 7,
@@ -104,6 +120,8 @@ export const products: Product[] = [
     dietaryTags: ["Organic", "Non-GMO"],
     category: "Grains",
     inStock: true,
+    healthConcerns: ["Gut Health", "Weight Loss"],
+    description: "Nutritious blend of multiple grains for balanced diet and energy.",
   },
   {
     id: 8,
@@ -116,5 +134,7 @@ export const products: Product[] = [
     dietaryTags: ["Organic", "Gluten-Free", "Vegan", "Non-GMO"],
     category: "Rice",
     inStock: true,
+    healthConcerns: ["Diabetes Care", "Weight Loss", "Gut Health"],
+    description: "Nutritious brown rice packed with fiber and essential nutrients.",
   },
 ];

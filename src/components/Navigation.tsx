@@ -1,47 +1,71 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
 const categories = [
-  { name: "🥄 GHEE", href: "#ghee" },
-  { name: "🌾 ATTA", href: "#atta" },
-  { name: "OIL", href: "#oil" },
-  { name: "SHOP BY CATEGORY", href: "#category" },
-  { name: "JOIN COLLECTIVE", href: "#collective", highlight: true },
-  { name: "SHOP BY CONCERN", href: "#concern" },
-  { name: "CURATED PICKS", href: "#picks" },
-  { name: "FARM LIFE", href: "#farm" },
-  { name: "TRACK ORDER", href: "/track-order" },
+  { name: "🥄 GHEE", category: "Ghee", type: "category" },
+  { name: "🌾 ATTA", category: "Grains", type: "category" },
+  { name: "🌿 OIL", category: "Oils", type: "category" },
+  { name: "🍚 RICE", category: "Rice", type: "category" },
+  { name: "SHOP BY CATEGORY", href: "#products", type: "scroll" },
+  { name: "JOIN COLLECTIVE", href: "#collective", type: "scroll", highlight: true },
+  { name: "SHOP BY CONCERN", href: "#concerns", type: "scroll" },
+  { name: "CURATED PICKS", href: "/curated-picks", type: "link" },
+  { name: "FARM LIFE", href: "/farm-life", type: "link" },
+  { name: "TRACK ORDER", href: "/track-order", type: "link" },
 ];
 
 export const Navigation = () => {
+  const navigate = useNavigate();
+
+  const handleClick = (item: typeof categories[0]) => {
+    if (item.type === "category") {
+      navigate(`/?category=${item.category}#products`);
+      setTimeout(() => {
+        document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else if (item.type === "scroll") {
+      const target = item.href?.replace("#", "");
+      document.getElementById(target || "")?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <nav className="bg-background border-b border-border sticky top-[72px] z-40">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center gap-1 py-3 overflow-x-auto">
-          {categories.map((category) => {
-            const isLink = category.href.startsWith('/');
-            const buttonContent = (
+          {categories.map((item) => {
+            if (item.type === "link") {
+              return (
+                <Link key={item.name} to={item.href || "#"}>
+                  <Button
+                    variant={item.highlight ? "default" : "ghost"}
+                    size="sm"
+                    className={
+                      item.highlight
+                        ? "bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold px-6 whitespace-nowrap"
+                        : "hover:bg-accent whitespace-nowrap"
+                    }
+                  >
+                    {item.name}
+                  </Button>
+                </Link>
+              );
+            }
+
+            return (
               <Button
-                key={category.name}
-                variant={category.highlight ? "default" : "ghost"}
+                key={item.name}
+                variant={item.highlight ? "default" : "ghost"}
                 size="sm"
+                onClick={() => handleClick(item)}
                 className={
-                  category.highlight
+                  item.highlight
                     ? "bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold px-6 whitespace-nowrap"
                     : "hover:bg-accent whitespace-nowrap"
                 }
               >
-                {category.name}
+                {item.name}
               </Button>
-            );
-
-            return isLink ? (
-              <Link key={category.name} to={category.href}>
-                {buttonContent}
-              </Link>
-            ) : (
-              buttonContent
             );
           })}
         </div>

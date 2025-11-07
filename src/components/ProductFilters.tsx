@@ -18,6 +18,7 @@ export interface FilterState {
   dietaryTags: string[];
   category: string;
   sortBy: string;
+  healthConcerns: string[];
 }
 
 interface ProductFiltersProps {
@@ -37,6 +38,13 @@ const dietaryOptions = [
 ];
 
 const categories = ["All", "Ghee", "Oils", "Grains", "Rice"];
+
+const healthConcerns = [
+  "Diabetes Care",
+  "Gut Health",
+  "Immunity Boost",
+  "Weight Loss",
+];
 
 export const ProductFilters = ({
   filters,
@@ -62,8 +70,16 @@ export const ProductFilters = ({
     onFilterChange({ ...filters, sortBy: value });
   };
 
+  const handleHealthConcernToggle = (concern: string) => {
+    const newConcerns = filters.healthConcerns.includes(concern)
+      ? filters.healthConcerns.filter((c) => c !== concern)
+      : [...filters.healthConcerns, concern];
+    onFilterChange({ ...filters, healthConcerns: newConcerns });
+  };
+
   const activeFilterCount =
     filters.dietaryTags.length +
+    filters.healthConcerns.length +
     (filters.category !== "All" ? 1 : 0) +
     (filters.priceRange[0] > 0 || filters.priceRange[1] < 2000 ? 1 : 0);
 
@@ -130,6 +146,25 @@ export const ProductFilters = ({
             </div>
           ))}
         </RadioGroup>
+      </div>
+
+      {/* Health Concerns */}
+      <div className="space-y-3">
+        <Label className="text-sm font-medium">Health Concerns</Label>
+        <div className="space-y-2">
+          {healthConcerns.map((concern) => (
+            <div key={concern} className="flex items-center space-x-2">
+              <Checkbox
+                id={concern}
+                checked={filters.healthConcerns.includes(concern)}
+                onCheckedChange={() => handleHealthConcernToggle(concern)}
+              />
+              <Label htmlFor={concern} className="cursor-pointer font-normal">
+                {concern}
+              </Label>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Dietary Tags */}

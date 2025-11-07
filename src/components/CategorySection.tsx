@@ -1,16 +1,26 @@
+import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import heroFarm from "@/assets/hero-farm.jpg";
 
 const concerns = [
-  { name: "Diabetes Care", color: "bg-leaf-green" },
-  { name: "Gut Health", color: "bg-secondary" },
-  { name: "Immunity Boost", color: "bg-primary" },
-  { name: "Weight Loss", color: "bg-earth-brown" },
+  { name: "Diabetes Care", color: "bg-leaf-green", slug: "Diabetes Care" },
+  { name: "Gut Health", color: "bg-secondary", slug: "Gut Health" },
+  { name: "Immunity Boost", color: "bg-primary", slug: "Immunity Boost" },
+  { name: "Weight Loss", color: "bg-earth-brown", slug: "Weight Loss" },
 ];
 
 export const CategorySection = () => {
+  const navigate = useNavigate();
+
+  const handleConcernClick = (concern: string) => {
+    navigate(`/?concern=${encodeURIComponent(concern)}#products`);
+    setTimeout(() => {
+      document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
   return (
-    <section className="py-16 bg-muted/50">
+    <section id="concerns" className="py-16 bg-muted/50">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-primary">
           Shop By Health Concern
@@ -23,7 +33,8 @@ export const CategorySection = () => {
           {concerns.map((concern) => (
             <Card
               key={concern.name}
-              className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden"
+              onClick={() => handleConcernClick(concern.slug)}
+              className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden hover:scale-105"
             >
               <div className={`${concern.color} h-32 flex items-center justify-center`}>
                 <h3 className="text-white font-bold text-lg text-center px-4">
