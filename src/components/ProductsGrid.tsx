@@ -4,8 +4,9 @@ import { ProductCard } from "./ProductCard";
 import { ProductFilters, FilterState } from "./ProductFilters";
 import { products as allProducts } from "@/data/products";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { SlidersHorizontal } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { SlidersHorizontal, Grid3x3, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export const ProductsGrid = () => {
   const [searchParams] = useSearchParams();
@@ -38,6 +39,12 @@ export const ProductsGrid = () => {
       healthConcerns: [],
     });
   };
+
+  const activeFilterCount =
+    filters.dietaryTags.length +
+    filters.healthConcerns.length +
+    (filters.category !== "All" ? 1 : 0) +
+    (filters.priceRange[0] > 0 || filters.priceRange[1] < 2000 ? 1 : 0);
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = allProducts.filter((product) => {
@@ -89,55 +96,90 @@ export const ProductsGrid = () => {
 
           {/* Mobile Filter Button */}
           <Sheet>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="outline" size="sm">
-                <SlidersHorizontal className="h-4 w-4 mr-2" />
+            <SheetTrigger asChild>
+              <Button variant="outline" size="sm" className="md:hidden gap-2">
+                <SlidersHorizontal className="h-4 w-4" />
                 Filters
+                {activeFilterCount > 0 && (
+                  <Badge variant="secondary" className="h-5 px-1.5 text-xs">
+                    {activeFilterCount}
+                  </Badge>
+                )}
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-80 overflow-y-auto">
+            <SheetContent side="left" className="w-[85vw] sm:w-96 overflow-y-auto p-0">
+              <SheetHeader className="p-6 pb-4 border-b">
+                <SheetTitle className="flex items-center gap-2">
+                  <SlidersHorizontal className="h-5 w-5 text-primary" />
+                  Product Filters
+                </SheetTitle>
+              </SheetHeader>
+              <div className="p-4">
+                <ProductFilters
+                  filters={filters}
+                  onFilterChange={setFilters}
+                  onClearAll={handleClearAll}
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Desktop Filters Sidebar - Sticky */}
+          <div className="hidden md:block lg:col-span-1">
+            <div className="sticky top-24">
               <ProductFilters
                 filters={filters}
                 onFilterChange={setFilters}
                 onClearAll={handleClearAll}
               />
-            </SheetContent>
-          </Sheet>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Desktop Filters Sidebar */}
-          <div className="hidden md:block lg:col-span-1">
-            <ProductFilters
-              filters={filters}
-              onFilterChange={setFilters}
-              onClearAll={handleClearAll}
-            />
+            </div>
           </div>
 
           {/* Products Grid */}
           <div className="lg:col-span-3">
-            <div className="mb-4 text-sm text-muted-foreground">
-              Showing {filteredAndSortedProducts.length} of {allProducts.length}{" "}
-              products
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <Grid3x3 className="h-5 w-5 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">
+                  Showing <span className="font-semibold text-foreground">{filteredAndSortedProducts.length}</span> of <span className="font-semibold text-foreground">{allProducts.length}</span> products
+                </p>
+              </div>
+              {activeFilterCount > 0 && (
+                <Badge variant="secondary" className="gap-1">
+                  {activeFilterCount} Active {activeFilterCount === 1 ? 'Filter' : 'Filters'}
+                </Badge>
+              )}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredAndSortedProducts.map((product) => (
-                <ProductCard key={product.id} {...product} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+              {filteredAndSortedProducts.map((product, index) => (
+                <div 
+                  key={product.id} 
+                  className="animate-fade-in"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <ProductCard {...product} />
+                </div>
               ))}
             </div>
             {filteredAndSortedProducts.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground text-lg">
-                  No products found matching your filters.
-                </p>
-                <Button
-                  variant="outline"
-                  className="mt-4"
-                  onClick={handleClearAll}
-                >
-                  Clear All Filters
-                </Button>
+              <div className="text-center py-16 px-4 bg-muted/30 rounded-xl border-2 border-dashed border-border">
+                <div className="max-w-md mx-auto">
+                  <div className="text-6xl mb-4">🔍</div>
+                  <h3 className="text-xl font-semibold text-foreground mb-2">No products found</h3>
+                  <p className="text-muted-foreground mb-6">
+                    Try adjusting your filters or clear all to see all products
+                  </p>
+                  <Button
+                    variant="default"
+                    onClick={handleClearAll}
+                    className="gap-2"
+                  >
+                    <X className="h-4 w-4" />
+                    Clear All Filters
+                  </Button>
+                </div>
               </div>
             )}
           </div>
