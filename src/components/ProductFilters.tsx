@@ -84,15 +84,16 @@ export const ProductFilters = ({
     (filters.priceRange[0] > 0 || filters.priceRange[1] < 2000 ? 1 : 0);
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="bg-card border border-border rounded-lg shadow-sm overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 pb-4 border-b border-border/50">
         <h3 className="text-lg font-semibold text-foreground">Filters</h3>
         {activeFilterCount > 0 && (
           <Button
             variant="ghost"
             size="sm"
             onClick={onClearAll}
-            className="text-sm"
+            className="text-sm h-8 hover:bg-destructive/10 hover:text-destructive transition-colors"
           >
             <X className="h-4 w-4 mr-1" />
             Clear All ({activeFilterCount})
@@ -100,89 +101,120 @@ export const ProductFilters = ({
         )}
       </div>
 
-      {/* Sort By */}
-      <div className="space-y-2">
-        <Label className="text-sm font-medium">Sort By</Label>
-        <Select value={filters.sortBy} onValueChange={handleSortChange}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select sorting" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="featured">Featured</SelectItem>
-            <SelectItem value="price-low">Price: Low to High</SelectItem>
-            <SelectItem value="price-high">Price: High to Low</SelectItem>
-            <SelectItem value="rating">Rating: High to Low</SelectItem>
-            <SelectItem value="newest">Newest First</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Price Range */}
-      <div className="space-y-4">
-        <Label className="text-sm font-medium">
-          Price Range: ₹{filters.priceRange[0]} - ₹{filters.priceRange[1]}
-          {filters.priceRange[1] === 2000 && "+"}
-        </Label>
-        <Slider
-          min={0}
-          max={2000}
-          step={50}
-          value={filters.priceRange}
-          onValueChange={handlePriceChange}
-          className="w-full"
-        />
-      </div>
-
-      {/* Category Filter */}
-      <div className="space-y-3">
-        <Label className="text-sm font-medium">Category</Label>
-        <RadioGroup value={filters.category} onValueChange={handleCategoryChange}>
-          {categories.map((category) => (
-            <div key={category} className="flex items-center space-x-2">
-              <RadioGroupItem value={category} id={category} />
-              <Label htmlFor={category} className="cursor-pointer font-normal">
-                {category}
-              </Label>
-            </div>
-          ))}
-        </RadioGroup>
-      </div>
-
-      {/* Health Concerns */}
-      <div className="space-y-3">
-        <Label className="text-sm font-medium">Health Concerns</Label>
-        <div className="space-y-2">
-          {healthConcerns.map((concern) => (
-            <div key={concern} className="flex items-center space-x-2">
-              <Checkbox
-                id={concern}
-                checked={filters.healthConcerns.includes(concern)}
-                onCheckedChange={() => handleHealthConcernToggle(concern)}
-              />
-              <Label htmlFor={concern} className="cursor-pointer font-normal">
-                {concern}
-              </Label>
-            </div>
-          ))}
+      <div className="p-6 space-y-6">
+        {/* Sort By */}
+        <div className="space-y-3">
+          <Label className="text-sm font-semibold text-foreground">Sort By</Label>
+          <Select value={filters.sortBy} onValueChange={handleSortChange}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select sorting" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="featured">Featured</SelectItem>
+              <SelectItem value="price-low">Price: Low to High</SelectItem>
+              <SelectItem value="price-high">Price: High to Low</SelectItem>
+              <SelectItem value="rating">Rating: High to Low</SelectItem>
+              <SelectItem value="newest">Newest First</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-      </div>
 
-      {/* Dietary Tags */}
-      <div className="space-y-3">
-        <Label className="text-sm font-medium">Dietary Preferences</Label>
-        <div className="space-y-2">
-          {dietaryOptions.map((tag) => (
-            <div key={tag} className="flex items-center space-x-2">
-              <Checkbox
-                id={tag}
-                checked={filters.dietaryTags.includes(tag)}
-                onCheckedChange={() => handleDietaryToggle(tag)}
-              />
-              <Label htmlFor={tag} className="cursor-pointer font-normal">
-                {tag}
-              </Label>
-            </div>
-          ))}
+        <div className="border-t border-border/50 pt-6" />
+
+        {/* Price Range */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label className="text-sm font-semibold text-foreground">Price Range</Label>
+            <span className="text-sm font-medium text-primary">
+              ₹{filters.priceRange[0]} - ₹{filters.priceRange[1]}
+              {filters.priceRange[1] === 2000 && "+"}
+            </span>
+          </div>
+          <Slider
+            min={0}
+            max={2000}
+            step={50}
+            value={filters.priceRange}
+            onValueChange={handlePriceChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="border-t border-border/50 pt-6" />
+
+        {/* Category Filter */}
+        <div className="space-y-3">
+          <Label className="text-sm font-semibold text-foreground">Category</Label>
+          <RadioGroup value={filters.category} onValueChange={handleCategoryChange}>
+            {categories.map((category) => (
+              <div
+                key={category}
+                className="flex items-center space-x-3 py-1.5 rounded-md hover:bg-muted/50 transition-colors px-1"
+              >
+                <RadioGroupItem value={category} id={category} />
+                <Label
+                  htmlFor={category}
+                  className="cursor-pointer font-normal text-sm flex-1"
+                >
+                  {category}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+        </div>
+
+        <div className="border-t border-border/50 pt-6" />
+
+        {/* Health Concerns */}
+        <div className="space-y-3">
+          <Label className="text-sm font-semibold text-foreground">Health Concerns</Label>
+          <div className="space-y-1">
+            {healthConcerns.map((concern) => (
+              <div
+                key={concern}
+                className="flex items-center space-x-3 py-1.5 rounded-md hover:bg-muted/50 transition-colors px-1"
+              >
+                <Checkbox
+                  id={concern}
+                  checked={filters.healthConcerns.includes(concern)}
+                  onCheckedChange={() => handleHealthConcernToggle(concern)}
+                />
+                <Label
+                  htmlFor={concern}
+                  className="cursor-pointer font-normal text-sm flex-1"
+                >
+                  {concern}
+                </Label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="border-t border-border/50 pt-6" />
+
+        {/* Dietary Tags */}
+        <div className="space-y-3">
+          <Label className="text-sm font-semibold text-foreground">Dietary Preferences</Label>
+          <div className="space-y-1">
+            {dietaryOptions.map((tag) => (
+              <div
+                key={tag}
+                className="flex items-center space-x-3 py-1.5 rounded-md hover:bg-muted/50 transition-colors px-1"
+              >
+                <Checkbox
+                  id={tag}
+                  checked={filters.dietaryTags.includes(tag)}
+                  onCheckedChange={() => handleDietaryToggle(tag)}
+                />
+                <Label
+                  htmlFor={tag}
+                  className="cursor-pointer font-normal text-sm flex-1"
+                >
+                  {tag}
+                </Label>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
