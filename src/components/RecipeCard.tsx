@@ -1,14 +1,17 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, Users, ChefHat } from "lucide-react";
 import { Recipe } from "@/data/recipes";
+import { RecipeDetailDialog } from "@/components/RecipeDetailDialog";
 
 interface RecipeCardProps {
   recipe: Recipe;
 }
 
 export const RecipeCard = ({ recipe }: RecipeCardProps) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "Easy":
@@ -75,10 +78,18 @@ export const RecipeCard = ({ recipe }: RecipeCardProps) => {
           )}
         </div>
 
-        <Button className="w-full bg-primary hover:bg-primary/90">
+        <Button 
+          className="w-full bg-primary hover:bg-primary/90"
+          onClick={() => setIsDialogOpen(true)}
+        >
           View Full Recipe
         </Button>
       </CardContent>
+      <RecipeDetailDialog 
+        recipe={recipe} 
+        open={isDialogOpen} 
+        onOpenChange={setIsDialogOpen} 
+      />
     </Card>
   );
 };

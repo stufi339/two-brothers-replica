@@ -1,8 +1,25 @@
+import { useState } from "react";
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export const Footer = () => {
+  const [email, setEmail] = useState("");
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      toast.success("Thanks for subscribing to our newsletter!");
+      setEmail("");
+    }
+  };
+
+  const handleSocialClick = (platform: string) => {
+    toast.info(`Follow us on ${platform}!`);
+  };
+
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
@@ -19,10 +36,10 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><a href="#" className="hover:text-primary-foreground transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-primary-foreground transition-colors">Our Farm</a></li>
-              <li><a href="#" className="hover:text-primary-foreground transition-colors">Membership</a></li>
-              <li><a href="#" className="hover:text-primary-foreground transition-colors">Contact</a></li>
+              <li><Link to="/curated-picks" className="hover:text-primary-foreground transition-colors">Curated Picks</Link></li>
+              <li><Link to="/farm-life" className="hover:text-primary-foreground transition-colors">Our Farm</Link></li>
+              <li><Link to="/order-tracking" className="hover:text-primary-foreground transition-colors">Track Order</Link></li>
+              <li><a href="mailto:contact@twobrothersorganicfarms.com" className="hover:text-primary-foreground transition-colors">Contact</a></li>
             </ul>
           </div>
 
@@ -30,34 +47,58 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><a href="#" className="hover:text-primary-foreground transition-colors">FAQs</a></li>
-              <li><a href="#" className="hover:text-primary-foreground transition-colors">Shipping Policy</a></li>
-              <li><a href="#" className="hover:text-primary-foreground transition-colors">Return Policy</a></li>
-              <li><a href="#" className="hover:text-primary-foreground transition-colors">Privacy Policy</a></li>
+              <li><a href="#faq" className="hover:text-primary-foreground transition-colors" onClick={(e) => { e.preventDefault(); toast.info("FAQs coming soon!"); }}>FAQs</a></li>
+              <li><a href="#shipping" className="hover:text-primary-foreground transition-colors" onClick={(e) => { e.preventDefault(); toast.info("Shipping Policy coming soon!"); }}>Shipping Policy</a></li>
+              <li><a href="#returns" className="hover:text-primary-foreground transition-colors" onClick={(e) => { e.preventDefault(); toast.info("Return Policy coming soon!"); }}>Return Policy</a></li>
+              <li><a href="#privacy" className="hover:text-primary-foreground transition-colors" onClick={(e) => { e.preventDefault(); toast.info("Privacy Policy coming soon!"); }}>Privacy Policy</a></li>
             </ul>
           </div>
 
           {/* Newsletter */}
           <div>
             <h4 className="font-semibold mb-4">Stay Connected</h4>
-            <div className="flex gap-2 mb-4">
+            <form onSubmit={handleNewsletterSubmit} className="flex gap-2 mb-4">
               <Input
+                type="email"
                 placeholder="Your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
                 className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50"
               />
-              <Button variant="secondary">Subscribe</Button>
-            </div>
+              <Button type="submit" variant="secondary">Subscribe</Button>
+            </form>
             <div className="flex gap-3">
-              <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10">
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                className="hover:bg-primary-foreground/10"
+                onClick={() => handleSocialClick("Facebook")}
+              >
                 <Facebook className="h-5 w-5" />
               </Button>
-              <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10">
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                className="hover:bg-primary-foreground/10"
+                onClick={() => handleSocialClick("Instagram")}
+              >
                 <Instagram className="h-5 w-5" />
               </Button>
-              <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10">
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                className="hover:bg-primary-foreground/10"
+                onClick={() => handleSocialClick("Twitter")}
+              >
                 <Twitter className="h-5 w-5" />
               </Button>
-              <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10">
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                className="hover:bg-primary-foreground/10"
+                onClick={() => handleSocialClick("YouTube")}
+              >
                 <Youtube className="h-5 w-5" />
               </Button>
             </div>

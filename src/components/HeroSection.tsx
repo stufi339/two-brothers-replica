@@ -1,8 +1,12 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { CollectiveDialog } from "@/components/CollectiveDialog";
 import mascotImage from "@/assets/mascot.png";
 
 export const HeroSection = () => {
+  const [isCollectiveOpen, setIsCollectiveOpen] = useState(false);
+
   return (
     <section className="bg-gradient-to-br from-warm-sand via-muted to-accent py-12 md:py-20">
       <div className="container mx-auto px-4">
@@ -29,19 +33,24 @@ export const HeroSection = () => {
                 TWO BROTHERS
                 <span className="block text-base">ORGANIC FARMS</span>
               </div>
-              <Badge className="bg-secondary text-secondary-foreground text-xl px-6 py-2 mt-4 block">
+              <Badge 
+                className="bg-secondary text-secondary-foreground text-xl px-6 py-2 mt-4 block cursor-pointer hover:bg-secondary/90 transition-colors"
+                onClick={() => setIsCollectiveOpen(true)}
+              >
                 COLLECTIVE
               </Badge>
             </div>
             <Button
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 mt-6 w-full md:w-auto font-semibold shadow-lg hover:shadow-xl transition-all"
+              onClick={() => setIsCollectiveOpen(true)}
             >
               SAVE ME A SPOT
             </Button>
           </div>
         </div>
       </div>
+      <CollectiveDialog open={isCollectiveOpen} onOpenChange={setIsCollectiveOpen} />
     </section>
   );
 };

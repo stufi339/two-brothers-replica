@@ -159,7 +159,7 @@ export const ProductsGrid = () => {
                   className="animate-fade-in"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <ProductCard {...product} />
+                  <ProductCard product={product} />
                 </div>
               ))}
             </div>
