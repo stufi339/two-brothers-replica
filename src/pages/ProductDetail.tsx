@@ -6,19 +6,25 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ProductImageGallery } from "@/components/ProductImageGallery";
 import { DetailedReviews } from "@/components/DetailedReviews";
+import { ReviewDialog } from "@/components/ReviewDialog";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { Header } from "@/components/Header";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const [quantity, setQuantity] = useState(1);
+  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
 
   const product = products.find((p) => p.id === Number(id));
+  const inWishlist = product ? isInWishlist(product.id) : false;
 
   if (!product) {
     return (
@@ -33,38 +39,38 @@ const ProductDetail = () => {
     );
   }
 
-  const mockReviews = [
-    {
-      id: 1,
-      name: "Priya Sharma",
-      rating: 5,
-      date: "2 weeks ago",
-      text: "Excellent quality! The taste is authentic and pure. My family loves it. Highly recommend for anyone looking for genuine organic products.",
-      verified: true,
-      helpful: 24,
-    },
-    {
-      id: 2,
-      name: "Rajesh Kumar",
-      rating: 5,
-      date: "1 month ago",
-      text: "Best quality I've found online. Worth every rupee. The packaging was also excellent and arrived fresh.",
-      verified: true,
-      helpful: 18,
-    },
-    {
-      id: 3,
-      name: "Anjali Patel",
-      rating: 4,
-      date: "1 month ago",
-      text: "Very good product. Slightly expensive but the quality justifies the price. Will order again.",
-      verified: true,
-      helpful: 12,
-    },
-  ];
-
   const handleAddToCart = () => {
     addToCart(product, quantity);
+  };
+
+  const handleWishlistToggle = () => {
+    if (inWishlist) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: product.name,
+      text: `Check out ${product.name} on Two Brothers Organic Farms`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copied to clipboard!");
+      }
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copied to clipboard!");
+      }
+    }
   };
 
   return (
@@ -85,7 +91,7 @@ const ProductDetail = () => {
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Image Gallery */}
             <ProductImageGallery
-              images={[product.image, product.image, product.image, product.image]}
+              images={product.images && product.images.length > 0 ? product.images : [product.image]}
               productName={product.name}
             />
 
@@ -184,10 +190,19 @@ const ProductDetail = () => {
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   {product.inStock ? "Add to Cart" : "Out of Stock"}
                 </Button>
-                <Button size="lg" variant="outline">
-                  <Heart className="h-5 w-5" />
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  onClick={handleWishlistToggle}
+                  className="transition-colors"
+                >
+                  <Heart className={`h-5 w-5 transition-colors ${inWishlist ? "fill-red-500 text-red-500" : ""}`} />
                 </Button>
-                <Button size="lg" variant="outline">
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  onClick={handleShare}
+                >
                   <Share2 className="h-5 w-5" />
                 </Button>
               </div>
@@ -209,15 +224,22 @@ const ProductDetail = () => {
           {/* Reviews Section */}
           <div className="mt-16">
             <DetailedReviews
-              reviews={mockReviews}
+              reviews={product.reviews || []}
               averageRating={product.rating}
               totalReviews={product.reviewCount}
+              onWriteReview={() => setIsReviewDialogOpen(true)}
             />
           </div>
         </div>
       </main>
 
       <Footer />
+      
+      <ReviewDialog
+        open={isReviewDialogOpen}
+        onOpenChange={setIsReviewDialogOpen}
+        productName={product.name}
+      />
     </div>
   );
 };

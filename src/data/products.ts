@@ -3,6 +3,16 @@ import oilImage from "@/assets/oil-product.jpg";
 import attaImage from "@/assets/atta-product.jpg";
 import riceImage from "@/assets/rice-product.jpg";
 
+export interface Review {
+  id: number;
+  name: string;
+  rating: number;
+  date: string;
+  text: string;
+  verified: boolean;
+  helpful: number;
+}
+
 export interface Product {
   id: number;
   image: string;
@@ -19,12 +29,14 @@ export interface Product {
   healthConcerns?: string[];
   description?: string;
   nutritionalInfo?: string;
+  reviews?: Review[];
 }
 
 export const products: Product[] = [
   {
     id: 1,
     image: gheeImage,
+    images: [gheeImage, gheeImage, gheeImage],
     name: "A2 Ghee from Free-Grazing Gir Cows",
     price: "899",
     originalPrice: "1099",
@@ -36,6 +48,35 @@ export const products: Product[] = [
     inStock: true,
     healthConcerns: ["Immunity Boost", "Gut Health"],
     description: "Pure A2 ghee made from the milk of free-grazing Gir cows. Rich in nutrients and perfect for cooking.",
+    reviews: [
+      {
+        id: 1,
+        name: "Priya Sharma",
+        rating: 5,
+        date: "2 weeks ago",
+        text: "Excellent quality! The taste is authentic and pure. My family loves it. Highly recommend for anyone looking for genuine organic products.",
+        verified: true,
+        helpful: 24,
+      },
+      {
+        id: 2,
+        name: "Rajesh Kumar",
+        rating: 5,
+        date: "1 month ago",
+        text: "Best quality I've found online. Worth every rupee. The packaging was also excellent and arrived fresh.",
+        verified: true,
+        helpful: 18,
+      },
+      {
+        id: 3,
+        name: "Anjali Patel",
+        rating: 4,
+        date: "1 month ago",
+        text: "Very good product. Slightly expensive but the quality justifies the price. Will order again.",
+        verified: true,
+        helpful: 12,
+      },
+    ],
   },
   {
     id: 2,

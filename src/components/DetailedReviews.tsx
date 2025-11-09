@@ -25,12 +25,14 @@ interface DetailedReviewsProps {
   reviews: Review[];
   averageRating: number;
   totalReviews: number;
+  onWriteReview?: () => void;
 }
 
 export const DetailedReviews = ({
   reviews,
   averageRating,
   totalReviews,
+  onWriteReview,
 }: DetailedReviewsProps) => {
   const ratingDistribution = [
     { stars: 5, percentage: 75, count: Math.floor(totalReviews * 0.75) },
@@ -82,8 +84,15 @@ export const DetailedReviews = ({
       <Separator />
 
       {/* Filter and Sort */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Customer Reviews</h3>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <h3 className="text-lg font-semibold">Customer Reviews</h3>
+          {onWriteReview && (
+            <Button onClick={onWriteReview} variant="outline" size="sm">
+              Write a Review
+            </Button>
+          )}
+        </div>
         <Select defaultValue="recent">
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Sort by" />
@@ -99,45 +108,62 @@ export const DetailedReviews = ({
 
       {/* Reviews List */}
       <div className="space-y-6">
-        {reviews.map((review) => (
-          <div key={review.id} className="space-y-3">
-            <div className="flex items-start justify-between">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold">{review.name}</span>
-                  {review.verified && (
-                    <Badge variant="secondary" className="text-xs">
-                      Verified Purchase
-                    </Badge>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`h-4 w-4 ${
-                          star <= review.rating
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-muted"
-                        }`}
-                      />
-                    ))}
+        {reviews.length === 0 ? (
+          <div className="text-center py-12 px-4 bg-muted/30 rounded-xl border-2 border-dashed border-border">
+            <div className="max-w-md mx-auto">
+              <div className="text-5xl mb-4">✍️</div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">No reviews yet</h3>
+              <p className="text-muted-foreground mb-4">
+                Be the first to share your experience with this product
+              </p>
+              {onWriteReview && (
+                <Button onClick={onWriteReview} variant="default">
+                  Write First Review
+                </Button>
+              )}
+            </div>
+          </div>
+        ) : (
+          reviews.map((review) => (
+            <div key={review.id} className="space-y-3">
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold">{review.name}</span>
+                    {review.verified && (
+                      <Badge variant="secondary" className="text-xs">
+                        Verified Purchase
+                      </Badge>
+                    )}
                   </div>
-                  <span className="text-sm text-muted-foreground">
-                    {review.date}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`h-4 w-4 ${
+                            star <= review.rating
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "text-muted"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {review.date}
+                    </span>
+                  </div>
                 </div>
               </div>
+              <p className="text-sm leading-relaxed">{review.text}</p>
+              <Button variant="ghost" size="sm" className="gap-2">
+                <ThumbsUp className="h-4 w-4" />
+                Helpful ({review.helpful})
+              </Button>
+              <Separator />
             </div>
-            <p className="text-sm leading-relaxed">{review.text}</p>
-            <Button variant="ghost" size="sm" className="gap-2">
-              <ThumbsUp className="h-4 w-4" />
-              Helpful ({review.helpful})
-            </Button>
-            <Separator />
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
