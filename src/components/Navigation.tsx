@@ -30,9 +30,9 @@ export const Navigation = () => {
   };
 
   return (
-    <nav className="bg-background border-b border-border sticky top-[72px] z-40">
+    <nav className="bg-background border-b border-border sticky top-[72px] z-40 hidden md:block">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-center gap-1 py-3 overflow-x-auto">
+        <div className="flex items-center justify-center gap-1 py-3 overflow-x-auto scrollbar-hide">
           {categories.map((item) => {
             if (item.type === "link") {
               return (

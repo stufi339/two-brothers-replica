@@ -49,7 +49,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <Button
             size="icon"
             variant="ghost"
-            className="absolute top-3 right-3 bg-background/80 hover:bg-background transition-colors"
+            className="absolute top-3 right-3 bg-background/80 hover:bg-background transition-colors min-h-[44px] min-w-[44px]"
             onClick={handleWishlistClick}
           >
             <Heart className={`h-5 w-5 transition-colors ${inWishlist ? "fill-red-500 text-red-500" : ""}`} />
@@ -90,7 +90,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       </Link>
       <CardFooter className="p-4 pt-0">
         <Button 
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground min-h-[44px] text-base"
           onClick={handleAddToCart}
         >
           <ShoppingCart className="mr-2 h-4 w-4" />

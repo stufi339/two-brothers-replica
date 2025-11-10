@@ -237,7 +237,7 @@ export const ProductFilters = ({
               return (
                 <div
                   key={category}
-                  className={`flex items-center space-x-3 py-2.5 px-3 rounded-lg transition-all duration-200 cursor-pointer group ${
+                  className={`flex items-center space-x-3 py-3 px-4 rounded-lg transition-all duration-200 cursor-pointer group min-h-[44px] ${
                     isActive 
                       ? "bg-primary/10 border border-primary/30 shadow-sm" 
                       : "hover:bg-muted/70 border border-transparent"
@@ -274,7 +274,7 @@ export const ProductFilters = ({
               return (
                 <div
                   key={concern}
-                  className={`flex items-center space-x-3 py-2.5 px-3 rounded-lg transition-all duration-200 cursor-pointer group ${
+                  className={`flex items-center space-x-3 py-3 px-4 rounded-lg transition-all duration-200 cursor-pointer group min-h-[44px] ${
                     isActive 
                       ? "bg-accent/40 border border-primary/20 shadow-sm" 
                       : "hover:bg-muted/70 border border-transparent"
@@ -314,7 +314,7 @@ export const ProductFilters = ({
               return (
                 <div
                   key={tag}
-                  className={`flex items-center space-x-3 py-2.5 px-3 rounded-lg transition-all duration-200 cursor-pointer group ${
+                  className={`flex items-center space-x-3 py-3 px-4 rounded-lg transition-all duration-200 cursor-pointer group min-h-[44px] ${
                     isActive 
                       ? "bg-accent/40 border border-primary/20 shadow-sm" 
                       : "hover:bg-muted/70 border border-transparent"
